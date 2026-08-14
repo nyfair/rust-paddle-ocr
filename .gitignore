@@ -1,5 +1,4 @@
 /target
-/ocr_gui
-/newbee_ocr_service
-.DS_Store
-/3rd_party/prebuilt/
+/include
+/lib
+Cargo.lock
