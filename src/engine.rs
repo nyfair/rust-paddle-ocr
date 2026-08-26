@@ -3,13 +3,12 @@
 //! Provides complete OCR pipeline encapsulation, performs detection and recognition in one call
 
 use image::{DynamicImage, GenericImageView};
-use imageproc::point::Point;
-use imageproc::rect::Rect;
 use std::path::{Path, PathBuf};
 
 use crate::det::{DetModel, DetOptions};
 use crate::error::{OcrError, OcrResult};
 use crate::mnn::{Backend, GpuMemoryMode, InferenceConfig, PrecisionMode};
+use crate::geom::{Point, Rect};
 use crate::ori::{OriModel, OriOptions};
 use crate::postprocess::{compute_iou, TextBox};
 use crate::rec::{
@@ -1379,7 +1378,7 @@ mod tests {
 
     #[test]
     fn test_ocr_result() {
-        let bbox = TextBox::new(imageproc::rect::Rect::at(0, 0).of_size(100, 20), 0.9);
+        let bbox = TextBox::new(Rect::at(0, 0).of_size(100, 20), 0.9);
         let result = OcrResult_::new("Hello".to_string(), 0.95, bbox);
 
         assert_eq!(result.text, "Hello");

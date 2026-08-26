@@ -3,12 +3,11 @@
 //! Provides text region detection functionality based on PaddleOCR detection models
 
 use image::{DynamicImage, GenericImageView, Rgb, RgbImage};
-use imageproc::geometric_transformations::{warp_into, Interpolation, Projection};
-use imageproc::point::Point;
 use ndarray::ArrayD;
 use std::path::Path;
 
 use crate::error::{OcrError, OcrResult};
+use crate::geom::{warp_bilinear_rgb, Point, Projection};
 use crate::mnn::{InferenceConfig, InferenceEngine};
 use crate::postprocess::{extract_boxes_with_unclip, TextBox};
 use crate::preprocess::{preprocess_for_det, resize_to_max_side, NormalizeParams};
@@ -398,10 +397,9 @@ fn crop_rotated_region(source: &RgbImage, points: [Point<f32>; 4]) -> Option<Dyn
 
     let projection = Projection::from_control_points(source_points, target_points)?;
     let mut output = RgbImage::new(crop_width, crop_height);
-    warp_into(
+    warp_bilinear_rgb(
         source,
         &projection,
-        Interpolation::Bilinear,
         Rgb([255, 255, 255]),
         &mut output,
     );

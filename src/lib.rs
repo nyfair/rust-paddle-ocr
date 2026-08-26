@@ -116,6 +116,7 @@
 pub mod det;
 pub mod engine;
 pub mod error;
+mod geom;
 pub mod mnn;
 mod ori;
 pub mod postprocess;
@@ -130,6 +131,7 @@ pub use engine::{
 };
 pub use error::{OcrError, OcrResult};
 pub use mnn::{Backend, GpuMemoryMode, InferenceConfig, InferenceEngine, PrecisionMode};
+pub use geom::{Point, Rect};
 pub use ori::{OriModel, OriOptions, OriPreprocessMode, OrientationResult};
 pub use postprocess::TextBox;
 pub use rec::{AlignedRecognitionResult, CharacterSpan, RecModel, RecOptions, RecognitionResult};

@@ -3,8 +3,7 @@
 //! Provides text recognition functionality based on PaddleOCR recognition models
 
 use image::{DynamicImage, RgbImage};
-use imageproc::geometric_transformations::Projection;
-use imageproc::point::Point;
+use crate::geom::{Point, Projection};
 use ndarray::{Array4, ArrayD, ArrayViewD, Axis};
 use rayon::prelude::*;
 use std::{borrow::Cow, path::Path};
@@ -1012,6 +1011,7 @@ impl RecModel {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::geom::Rect;
 
     #[test]
     fn test_rec_options_default() {
@@ -1109,7 +1109,7 @@ mod tests {
     #[test]
     fn test_region_target_width_avoids_projection_degenerate_width() {
         let text_box = TextBox::with_points(
-            imageproc::rect::Rect::at(747, 14).of_size(61, 1695),
+            Rect::at(747, 14).of_size(61, 1695),
             0.9,
             [
                 Point::new(747.0, 14.0),

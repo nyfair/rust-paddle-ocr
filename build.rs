@@ -1,5 +1,7 @@
 fn main() {
+    let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
     let out_dir = std::env::var("OUT_DIR").unwrap();
+    println!("cargo:rerun-if-changed={manifest_dir}/lib/MNN.lib");
     std::fs::copy("mnn_bindings.rs", format!("{}/mnn_bindings.rs", out_dir)).expect("no mnn_bindings.rs");
     cc::Build::new()
         .cpp(true)
@@ -9,6 +11,6 @@ fn main() {
         .flag("/std:c++14")
         .flag("/EHsc")
         .compile("mnn_wrapper");
-    println!("cargo:rustc-link-search=native=lib");
+    println!("cargo:rustc-link-search=native={manifest_dir}/lib");
     println!("cargo:rustc-link-lib=static=MNN");
 }

@@ -3,9 +3,7 @@
 //! Provides post-processing functions for text detection results, including bounding box extraction, NMS, box merging, etc.
 
 use image::GrayImage;
-use imageproc::contours::{find_contours, Contour};
-use imageproc::point::Point;
-use imageproc::rect::Rect;
+use crate::geom::{find_contours, Contour, Point, Rect};
 
 /// Text bounding box
 #[derive(Debug, Clone)]
@@ -153,7 +151,7 @@ pub fn extract_boxes_with_unclip(
         .unwrap_or_else(|| GrayImage::new(mask_width, mask_height));
 
     // Find contours
-    let contours = find_contours::<i32>(&gray_image);
+    let contours = find_contours(&gray_image);
 
     // Calculate scale ratio (from valid region to original image)
     let scale_x = original_width as f32 / valid_width as f32;
@@ -207,7 +205,7 @@ pub fn extract_boxes_with_unclip(
 }
 
 fn contour_points_in_valid_region(
-    contour: &Contour<i32>,
+    contour: &Contour,
     valid_width: u32,
     valid_height: u32,
 ) -> Vec<Point<f32>> {
@@ -493,7 +491,7 @@ fn expand_ordered_points(
 }
 
 /// Get contour bounds
-fn get_contour_bounds(contour: &Contour<i32>) -> (i32, i32, i32, i32) {
+fn get_contour_bounds(contour: &Contour) -> (i32, i32, i32, i32) {
     let mut min_x = i32::MAX;
     let mut min_y = i32::MAX;
     let mut max_x = i32::MIN;
@@ -829,7 +827,7 @@ pub fn detect_text_traditional(
     // 3. Create binary image and find contours
     let binary_image =
         GrayImage::from_raw(width, height, binary).unwrap_or_else(|| GrayImage::new(width, height));
-    let contours = find_contours::<i32>(&binary_image);
+    let contours = find_contours(&binary_image);
 
     // 4. Extract bounding boxes
     let mut boxes = Vec::new();
